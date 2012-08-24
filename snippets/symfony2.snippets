@@ -1,0 +1,131 @@
+snippet sfaction
+	/**
+	 * @Route(${1:route configuration})
+	 * @Template()
+	 */
+	public function ${2:index}Action()
+	{
+		${0}
+	}
+snippet sfcontroller
+	<?php
+
+	namespace ${1:`substitute(substitute(expand("%:h"), '\v^\w+\/(\u)', '\1', ''), '\/', '\\\', 'g')`};
+
+	use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+	use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+	use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+	class ${3:ControllerName}Controller extends Controller
+	{
+		/**
+		 * @Route(${4:route configuration})
+		 * @Template
+		 */
+		public function ${5:index}Action()
+		{
+			${0}
+		}
+	}
+snippet sfdiconfiguration
+	<?php
+
+	namespace ${1:`substitute(substitute(expand("%:h"), '\v^\w+\/(\u)', '\1', ''), '\/', '\\\', 'g')`};
+
+	use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+	use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+	use Symfony\Component\Config\Definition\ConfigurationInterface;
+
+	class Configuration implements ConfigurationInterface
+	{
+		public function getConfigTreeBuilder()
+		{
+			\$treeBuilder = new TreeBuilder();
+			\$rootNode = \$treeBuilder->root('${3:bundle_name}');
+
+			\$rootNode
+				->children()
+					->scalarNode('enabled')
+						->setInfo('Enable the container extension')
+						->setDefault(true)
+					->end()
+				->end()
+			;
+
+			return \$treeBuilder;
+		}
+	}
+snippet sfdiextension
+	<?php
+
+	namespace ${1:`substitute(substitute(expand("%:h"), '\v^\w+\/(\u)', '\1', ''), '\/', '\\\', 'g')`};
+
+	use Symfony\Component\DependencyInjection\ContainerBuilder;
+	use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+	use Symfony\Component\Config\FileLocator;
+
+	class ${2:BundleName}Extension extends Extension
+	{
+		public function load(array \$configs, ContainerBuilder \$container)
+		{
+			\$config = \$this->processConfiguration(new Configuration(), \$configs);
+			if (false === \$config['enabled']) {
+				return;
+			}
+
+			\$loader = new XmlFileLoader(\$container, new FileLocator(__DIR__.'/../Resources/config'));
+			\$loader->load('services.xml');
+		}
+	}
+snippet sfdiservices
+	<?xml version="1.0" ?>
+
+	<container xmlns="http://symfony.com/schema/dic/services"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+		<services>
+			<service id="${1:id}" class="${2:class}" />
+		</services>
+	</container>
+snippet sfrepository
+	<?php
+
+	namespace ${1:`substitute(substitute(expand("%:h"), '\v^\w+\/(\u)', '\1', ''), '\/', '\\\', 'g')`};
+
+	use Doctrine\ORM\EntityRepository;
+
+	class ${3:EntityName}Repository extends EntityRepository
+	{
+	}
+snippet sfformtype
+	<?php
+
+	namespace ${1:`substitute(substitute(expand("%:h"), '\v^\w+\/(\u)', '\1', ''), '\/', '\\\', 'g')`};
+
+	use Symfony\Component\Form\AbstractType;
+	use Symfony\Component\Form\FormBuilder;
+
+	class ${2:FormName}Type extends AbstractType
+	{
+		public function buildForm(FormBuilder \$builder, array \$options)
+		{
+			${0}
+		}
+
+		public function getDefaultOptions(array \$options)
+		{
+			return array(
+				'data_class' => '${3}',
+			);
+		}
+
+		public function getName()
+		{
+			return '${4}';
+		}
+	}
+snippet em
+	$this->getDoctrine()->getEntityManager();
+snippet repository
+	$this->getDoctrine()->getEntityManager()->getRepository(${1});

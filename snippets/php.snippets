@@ -43,7 +43,7 @@ snippet m
 # but `compile` time
 # so `tolower` here won't work
 # but it would be wonderful if we could make the property and parameter to lower case
-snippet sm 
+snippet sm
 	${1:public} function set${2:Foo}(${3:$2 }$${4:`tolower('$2')`})
 	{
 		$this->${5:$4} = $$4;
@@ -85,7 +85,7 @@ snippet S
 	$_SERVER['${1:variable}']${2}
 snippet SS
 	$_SESSION['${1:variable}']${2}
-	
+
 # the following are old ones
 snippet inc
 	include '${1:file}';${2}
@@ -186,35 +186,7 @@ snippet doc_h
 	 * @copyright ${4:$2}, `strftime('%d %B, %Y')`
 	 * @package ${5:default}
 	 */
-	
-# Interface
-snippet interface
-	/**
-	 * ${2:undocumented class}
-	 *
-	 * @package ${3:default}
-	 * @author ${4:`g:snips_author`}
-	 */
-	interface ${1:}
-	{
-		${5}
-	}
-# class ...
-snippet class
-	/**
-	 * ${1}
-	 */
-	class ${2:ClassName}
-	{
-		${3}
-		/**
-		 * ${4}
-		 */
-		${5:public} function ${6:__construct}(${7:argument})
-		{
-			${8:// code...}
-		}
-	}
+
 # define(...)
 snippet def
 	define('${1}'${2});${3}
@@ -300,7 +272,7 @@ snippet array
 snippet try
 	try {
 		${2}
-	} catch (${1:Exception} $e) {
+	} catch (${1:\Exception} $e) {
 	}
 # lambda with closure
 snippet lambda
@@ -314,12 +286,18 @@ snippet pd
 snippet pdd
 	echo '<pre>'; var_dump(${1}); echo '</pre>'; die(${2:});
 snippet vd
+	print "<pre>";
 	var_dump(${1});
+	print "</pre>";
 snippet vdd
-	var_dump(${1}); die(${2:});
+	print "<pre>";
+	var_dump(${1});
+	die(${2:});
+snippet ici
+	exit(${1:'ici'});
 snippet http_redirect
-	header ("HTTP/1.1 301 Moved Permanently"); 
-	header ("Location: ".URL); 
+	header ("HTTP/1.1 301 Moved Permanently");
+	header ("Location: ".URL);
 	exit();
 # Getters & Setters
 snippet getset
@@ -347,3 +325,22 @@ snippet rett
 	return true;
 snippet retf
 	return false;
+snippet class
+	<?php
+
+	namespace ${1:`substitute(substitute(expand("%:h"), '\v^\w+\/(\u)', '\1', ''), '\/', '\\\', 'g')`};
+
+	class ${2:`Filename('', 'myClass')`}
+	{
+		${3}
+	}
+# Interface
+snippet interface
+	<?php
+
+	namespace ${1:`substitute(substitute(expand("%:h"), '\v^\w+\/(\u)', '\1', ''), '\/', '\\\', 'g')`};
+
+	interface ${2:`Filename('', 'myClass')`}
+	{
+		${3}
+	}
