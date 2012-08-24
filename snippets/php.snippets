@@ -294,7 +294,7 @@ snippet vdd
 	var_dump(${1});
 	die(${2:});
 snippet ici
-	exit(${1:'ici'});
+	exit('${1:ici}');
 snippet http_redirect
 	header ("HTTP/1.1 301 Moved Permanently");
 	header ("Location: ".URL);
